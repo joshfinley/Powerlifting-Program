@@ -4,11 +4,12 @@ import calendar
 import os
 
 class Exercise:
-    def __init__(self, name: str, sets: int, reps: int, intensity: float):
+    def __init__(self, name: str, sets: int, reps: int, intensity: float, is_amrap: bool = False):
         self.name = name
         self.sets = sets
         self.reps = reps
         self.intensity = intensity
+        self.is_amrap = is_amrap
 
 class PowerliftingProgram:
     def __init__(self):
@@ -42,13 +43,13 @@ class PowerliftingProgram:
     def get_squat_progression(self, week_in_cycle: int) -> Exercise:
         """Returns squat parameters for given week in 4-week cycle"""
         progressions = {
-            1: Exercise("Squat", 2, 15, 0.625),
+            1: Exercise("Squat", 2, 15, 0.625, is_amrap=True),  # Added is_amrap=True for 2x15
             2: Exercise("Squat", 3, 7, 0.76),
             3: Exercise("Squat", 4, 3, 0.86),
             4: Exercise("Box Squat", 1, 1, 1.0)
         }
         return progressions[week_in_cycle]
-    
+        
     def get_gear_level(self, week_in_cycle: int) -> str:
         """Returns gear requirements - only used on peak week"""
         return "Suit + Briefs" if week_in_cycle == 4 else "Raw"
@@ -68,13 +69,15 @@ class PowerliftingProgram:
     def get_deadlift_workout(self, week_in_cycle: int, style: str) -> str:
         """Returns deadlift workout based on week in cycle and style"""
         intensities = {
-            1: (2, 15, 0.625),
-            2: (3, 7, 0.76),
-            3: (4, 3, 0.86),
-            4: (1, 1, 1.0)
+            1: (2, 15, 0.625, True),  # Added True for is_amrap
+            2: (3, 7, 0.76, False),
+            3: (4, 3, 0.86, False),
+            4: (1, 1, 1.0, False)
         }
-        sets, reps, intensity = intensities[week_in_cycle]
-        return f"{style}: {sets}x{reps} @ {intensity*100}%"
+        sets, reps, intensity, is_amrap = intensities[week_in_cycle]
+        reps_display = f"{reps}+" if is_amrap else str(reps)
+        return f"{style}: {sets}x{reps_display} @ {intensity*100}%"
+
     
     def get_bench_workout(self, week_in_cycle: int) -> str:
         """Returns bench workout based on week in cycle"""
@@ -97,7 +100,9 @@ class PowerliftingProgram:
         week_date = self.get_week_date(week_number)
         
         squat = self.get_squat_progression(week_in_cycle)
+        reps_display = f"{squat.reps}+" if squat.is_amrap else str(squat.reps)
         
+            
         week_program = {
             "Date": week_date.strftime('%m-%d-%Y'),
             "Week": week_number,
@@ -105,7 +110,7 @@ class PowerliftingProgram:
             "Chains": chains,
             "Gear": gear,
             "Monday": {
-                "Main": f"{squat.name}: {squat.sets}x{squat.reps} @ {squat.intensity*100}% {gear if gear != 'Raw' else ''}",
+                "Main": f"{squat.name}: {squat.sets}x{reps_display} @ {squat.intensity*100}% {gear if gear != 'Raw' else ''}",
                 "Accessories": [
                     "Lunges: 4x15",
                     "Heel Touch Step Downs: 3x15",
