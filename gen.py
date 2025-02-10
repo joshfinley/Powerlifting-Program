@@ -129,7 +129,7 @@ class PowerliftingProgram:
                     "Hamstring Curl: 4x15",
                     "Reverse Hyper: 3x20"
                 ],
-                "Giant Set": [
+                "Giant Set (5 Rounds)": [
                     "Weighted Decline Situps: AMRAP",
                     "Bench Press: AMRAP @ 65%",
                     "Lat Pulldown: 12 reps"
