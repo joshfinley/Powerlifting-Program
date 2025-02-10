@@ -287,7 +287,7 @@ class PowerliftingProgram:
         for program in programs:
             week_num = program["Week"]
             date = program["Date"]
-            filename = f"{date}-program.html"
+            filename = f"docs/{date}-program.html"  # Fixed line
             links_html += f'<li><a href="{filename}">Week {week_num} - {date}</a></li>'
 
         index_html = f"""
@@ -371,7 +371,7 @@ class PowerliftingProgram:
         
         # Generate index.html
         index_html = self.generate_index_html(all_programs)
-        with open("docs/index.html", "w") as f:
+        with open("index.html", "w") as f:
             f.write(index_html)
 
 
