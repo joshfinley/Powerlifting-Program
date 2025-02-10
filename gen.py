@@ -125,6 +125,10 @@ class PowerliftingProgram:
             },
             "Friday": {
                 "Main": self.get_deadlift_workout(week_in_cycle, deadlift_style),
+                "Accessories": [
+                    "Hamstring Curl: 4x15",
+                    "Reverse Hyper: 3x20"
+                ],
                 "Giant Set": [
                     "Weighted Decline Situps: AMRAP",
                     "Bench Press: AMRAP @ 65%",
@@ -135,7 +139,8 @@ class PowerliftingProgram:
                 "Main": self.get_bench_workout(week_in_cycle),
                 "Accessories": [
                     "JM Press: 4x12",
-                    "Incline DB Press: 3x12",
+                    "Dumbbell Bench Press: 3x15",
+                    "Incline DB Press: 3x15",
                     "Superset (5 rounds):",
                     "- Long Rope Tricep Pushdown",
                     "- Rear Delt Flies"
