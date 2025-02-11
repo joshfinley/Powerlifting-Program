@@ -305,7 +305,7 @@ class PowerliftingProgram:
         for program in programs:
             week_num = program["Week"]
             date = program["Date"]
-            filename = f"{date}-program.html"
+            filename = f"docs/{date}-program.html"
             links_html += f'<li><a href="{filename}">Week {week_num} - {date}</a></li>'
 
         # Read and parse README.md content
