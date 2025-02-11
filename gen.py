@@ -43,17 +43,27 @@ class PowerliftingProgram:
     def get_squat_progression(self, week_in_cycle: int) -> Exercise:
         """Returns squat parameters for given week in 4-week cycle"""
         progressions = {
-            1: Exercise("Squat", 2, 15, 0.625, is_amrap=True),  # Added is_amrap=True for 2x15
+            1: Exercise("Squat", 2, 15, 0.625, is_amrap=True),
             2: Exercise("Squat", 3, 7, 0.76),
             3: Exercise("Squat", 4, 3, 0.86),
-            4: Exercise("Box Squat", 1, 1, 1.0)
+            4: Exercise("Box Squat", 1, 1, "RPE 9-10")
         }
         return progressions[week_in_cycle]
         
-    def get_gear_level(self, week_in_cycle: int) -> str:
-        """Returns gear requirements - only used on peak week"""
-        return "Suit + Briefs" if week_in_cycle == 4 else "Raw"
-    
+        
+    def get_gear_level(self, week_number: int) -> str:
+        """Returns gear requirements - peak weeks follow 3-month cycle of briefs->suit->briefs+suit"""
+        week_in_cycle = ((week_number - 1) % 4) + 1
+        if week_in_cycle != 4:  # Only use gear on week 4 of each cycle
+            return "Raw"
+            
+        # On peak weeks (week 4), cycle through gear every 3 months (12 weeks)
+        peak_count = (week_number - 1) // 4  # How many peak weeks have passed (0-based)
+        gear_cycle = peak_count % 3  # 0=briefs, 1=suit, 2=briefs+suit
+        
+        gear_types = ["Briefs", "Suit", "Briefs + Suit"]
+        return gear_types[gear_cycle]
+        
     def get_cardio_workout(self, week_number: int, weather_condition: str = "good") -> str:
         """Returns cardio workout based on week rotation and weather"""
         if weather_condition.lower() == "bad":
@@ -69,15 +79,16 @@ class PowerliftingProgram:
     def get_deadlift_workout(self, week_in_cycle: int, style: str) -> str:
         """Returns deadlift workout based on week in cycle and style"""
         intensities = {
-            1: (2, 15, 0.625, True),  # Added True for is_amrap
+            1: (2, 15, 0.625, True),
             2: (3, 7, 0.76, False),
             3: (4, 3, 0.86, False),
-            4: (1, 1, 1.0, False)
+            4: (1, 1, "RPE 9-10", False)
         }
         sets, reps, intensity, is_amrap = intensities[week_in_cycle]
         reps_display = f"{reps}+" if is_amrap else str(reps)
-        return f"{style}: {sets}x{reps_display} @ {intensity*100}%"
-
+        intensity_display = f"{intensity*100}%" if isinstance(intensity, float) else intensity
+        return f"{style}: {sets}x{reps_display} @ {intensity_display}"
+    
     
     def get_bench_workout(self, week_in_cycle: int) -> str:
         """Returns bench workout based on week in cycle"""
@@ -85,7 +96,7 @@ class PowerliftingProgram:
             1: "Bench Press: 2x15 @ 62.5%",
             2: "Bench Press: 3x7 @ 76%",
             3: "Bench Press: 4x3 @ 86%",
-            4: "Bench Press (Shirted): 1x1 @ 100%"
+            4: "Bench Press (Shirted): 1x1 @ RPE 9-10"
         }
         return bench_progression[week_in_cycle]
 
@@ -94,28 +105,26 @@ class PowerliftingProgram:
         week_in_cycle = ((week_number - 1) % 4) + 1
         month = ((week_number - 1) // 4) + 1
         current_bar = self.get_bar_for_week(week_number)
-        chains = self.get_chain_status(week_number)
-        gear = self.get_gear_level(week_in_cycle)
+        gear = self.get_gear_level(week_number)
         deadlift_style = self.get_deadlift_style(month)
         week_date = self.get_week_date(week_number)
         
         squat = self.get_squat_progression(week_in_cycle)
         reps_display = f"{squat.reps}+" if squat.is_amrap else str(squat.reps)
-        
+        intensity_display = f"{squat.intensity*100}%" if isinstance(squat.intensity, float) else squat.intensity
             
         week_program = {
             "Date": week_date.strftime('%m-%d-%Y'),
             "Week": week_number,
             "Bar Type": current_bar,
-            "Chains": chains,
             "Gear": gear,
             "Monday": {
-                "Main": f"{squat.name}: {squat.sets}x{reps_display} @ {squat.intensity*100}% {gear if gear != 'Raw' else ''}",
+                "Main": f"{squat.name}: {squat.sets}x{reps_display} @ {intensity_display} {gear if gear != 'Raw' else ''}",
                 "Accessories": [
                     "Lunges: 4x15",
                     "Heel Touch Step Downs: 3x15",
-                    "Giant Set (5 rounds):",
-                    "- Cable Woodchopper: AMRAP",
+                    "Giant Set (3-5 rounds):",
+                    "- Cable Woodchopper: 15 reps",
                     "- Seated Barbell OHP: 12 reps",
                     "- T-bar Row: 12 reps"
                 ]
@@ -129,7 +138,7 @@ class PowerliftingProgram:
                     "Hamstring Curl: 4x15",
                     "Reverse Hyper: 3x20"
                 ],
-                "Giant Set (5 Rounds)": [
+                "Giant Set (3-5 Rounds)": [
                     "Weighted Decline Situps: AMRAP",
                     "Bench Press: AMRAP @ 65%",
                     "Lat Pulldown: 12 reps"
@@ -141,7 +150,7 @@ class PowerliftingProgram:
                     "JM Press: 4x12",
                     "Dumbbell Bench Press: 3x15",
                     "Incline DB Press: 3x15",
-                    "Superset (5 rounds):",
+                    "Superset (3-5 rounds):",
                     "- Long Rope Tricep Pushdown",
                     "- Rear Delt Flies"
                 ]
@@ -154,7 +163,6 @@ class PowerliftingProgram:
         output = []
         output.append(f"Week {week_program['Week']} - {week_program['Date']}")
         output.append(f"Bar: {week_program['Bar Type']}")
-        output.append(f"Chains: {'Yes' if week_program['Chains'] else 'No'}")
         output.append(f"Gear: {week_program['Gear']}\n")
         
         for day, workout in week_program.items():
@@ -182,7 +190,6 @@ class PowerliftingProgram:
                 <h2>Week {week_program['Week']} - {week_program['Date']}</h2>
                 <div class="program-meta">
                     <p><strong>Bar:</strong> {week_program['Bar Type']}</p>
-                    <p><strong>Chains:</strong> {'Yes' if week_program['Chains'] else 'No'}</p>
                     <p><strong>Gear:</strong> {week_program['Gear']}</p>
                 </div>
             </div>
