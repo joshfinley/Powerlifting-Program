@@ -299,13 +299,36 @@ class PowerliftingProgram:
             f.write(html_content)
 
     def generate_index_html(self, programs: List[Dict]) -> str:
-        """Generates an index.html file linking to all program weeks"""
+        """Generates an index.html file with program overview and links to all program weeks"""
+        # Generate week links
         links_html = ""
         for program in programs:
             week_num = program["Week"]
             date = program["Date"]
-            filename = f"docs/{date}-program.html"  # Fixed line
+            filename = f"{date}-program.html"
             links_html += f'<li><a href="{filename}">Week {week_num} - {date}</a></li>'
+
+        # Read and parse README.md content
+        try:
+            import markdown
+            from markdown.extensions.fenced_code import FencedCodeExtension
+            from markdown.extensions.tables import TableExtension
+            
+            with open('README.md', 'r', encoding='utf-8') as f:
+                readme_content = f.read()
+                
+            # Convert markdown to HTML with extensions
+            md = markdown.Markdown(extensions=[
+                'extra',  # includes tables, fenced_code, footnotes, and more
+                'codehilite',  # syntax highlighting
+                'meta'  # metadata processing
+            ])
+            readme_html = md.convert(readme_content)
+            
+        except ImportError:
+            readme_html = "<p>Please install the 'markdown' package to render README content.</p>"
+        except FileNotFoundError:
+            readme_html = "<p>README.md file not found.</p>"
 
         index_html = f"""
         <!DOCTYPE html>
@@ -317,26 +340,49 @@ class PowerliftingProgram:
             <style>
                 body {{
                     font-family: Arial, sans-serif;
-                    max-width: 800px;
+                    max-width: 1200px;
                     margin: 40px auto;
                     padding: 0 20px;
+                    line-height: 1.6;
                 }}
-                .program-index {{
+                .program-container {{
+                    display: grid;
+                    grid-template-columns: 250px 1fr;
+                    gap: 30px;
+                    margin-top: 30px;
+                }}
+                .sidebar {{
+                    background: white;
+                    padding: 20px;
+                    border-radius: 8px;
+                    box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+                    height: fit-content;
+                    position: sticky;
+                    top: 20px;
+                }}
+                .main-content {{
                     background: white;
                     padding: 30px;
                     border-radius: 8px;
                     box-shadow: 0 2px 4px rgba(0,0,0,0.1);
                 }}
-                h1 {{
+                h1, h2, h3 {{
                     color: #2c3e50;
+                }}
+                h1 {{
                     border-bottom: 2px solid #eee;
                     padding-bottom: 10px;
                 }}
-                ul {{
+                h2 {{
+                    margin-top: 30px;
+                    border-bottom: 1px solid #eee;
+                    padding-bottom: 5px;
+                }}
+                .week-links {{
                     list-style-type: none;
                     padding: 0;
                 }}
-                li {{
+                .week-links li {{
                     margin: 10px 0;
                     padding: 10px;
                     background: #f8f9fa;
@@ -349,14 +395,81 @@ class PowerliftingProgram:
                 a:hover {{
                     color: #3498db;
                 }}
+                /* README content styles */
+                .readme-content {{
+                    margin-top: 20px;
+                }}
+                .readme-content h1 {{
+                    font-size: 2em;
+                    margin-top: 0;
+                }}
+                .readme-content h2 {{
+                    font-size: 1.5em;
+                    margin-top: 25px;
+                }}
+                .readme-content h3 {{
+                    font-size: 1.2em;
+                    margin-top: 20px;
+                }}
+                .readme-content p {{
+                    margin: 15px 0;
+                }}
+                .readme-content ul, .readme-content ol {{
+                    padding-left: 25px;
+                    margin: 15px 0;
+                }}
+                .readme-content li {{
+                    margin: 5px 0;
+                }}
+                .readme-content code {{
+                    background-color: #f6f8fa;
+                    padding: 2px 4px;
+                    border-radius: 3px;
+                    font-family: monospace;
+                }}
+                .readme-content pre {{
+                    background-color: #f6f8fa;
+                    padding: 16px;
+                    border-radius: 6px;
+                    overflow-x: auto;
+                }}
+                .readme-content blockquote {{
+                    margin: 15px 0;
+                    padding: 0 15px;
+                    border-left: 4px solid #ddd;
+                    color: #666;
+                }}
+                .readme-content table {{
+                    border-collapse: collapse;
+                    width: 100%;
+                    margin: 15px 0;
+                }}
+                .readme-content th, .readme-content td {{
+                    border: 1px solid #ddd;
+                    padding: 8px;
+                    text-align: left;
+                }}
+                .readme-content th {{
+                    background-color: #f6f8fa;
+                }}
             </style>
         </head>
         <body>
-            <div class="program-index">
-                <h1>6-Month Powerlifting Program</h1>
-                <ul>
-                    {links_html}
-                </ul>
+            <h1>6-Month Powerlifting Program</h1>
+            
+            <div class="program-container">
+                <div class="sidebar">
+                    <h3>Quick Navigation</h3>
+                    <ul class="week-links">
+                        {links_html}
+                    </ul>
+                </div>
+                
+                <div class="main-content">
+                    <div class="readme-content">
+                        {readme_html}
+                    </div>
+                </div>
             </div>
         </body>
         </html>
