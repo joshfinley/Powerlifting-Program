@@ -132,9 +132,9 @@ class ProgramBuilder:
                     "Reverse Hyper: 3x20"
                 ],
                 "Giant Set (3-5 Rounds)": [
-                    "Weighted Decline Situps: AMRAP",
-                    "Bench Press: AMRAP @ 65%",
-                    "Lat Pulldown: 12 reps"
+                    "- Weighted Decline Situps: AMRAP",
+                    "- Bench Press: AMRAP @ 65%",
+                    "- Lat Pulldown: 12 reps"
                 ]
             }
         }

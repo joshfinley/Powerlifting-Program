@@ -1,7 +1,4 @@
 from typing import Dict, List
-import markdown
-from markdown.extensions.fenced_code import FencedCodeExtension
-from markdown.extensions.tables import TableExtension
 
 class HTMLTemplates:
     @staticmethod
