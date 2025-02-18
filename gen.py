@@ -14,7 +14,7 @@ class Exercise:
 class PowerliftingProgram:
     def __init__(self):
         # Force the date to be Monday, February 10th, 2025
-        self.start_date = datetime(year=2025, month=2, day=10, hour=0, minute=0, second=0, microsecond=0)
+        self.start_date = datetime(year=2025, month=2, day=17, hour=0, minute=0, second=0, microsecond=0)
         self.bars = ["SSB", "Cambered", "Straight"]
         self.current_bar_index = 0
         self.weeks_on_current_bar = 0
@@ -118,7 +118,10 @@ class PowerliftingProgram:
             "Week": week_number,
             "Bar Type": current_bar,
             "Gear": gear,
-            "Monday": {
+            "Sunday": {
+                "Cardio": self.get_cardio_workout(week_number)
+            },
+            "Tuesday": {
                 "Main": f"{squat.name}: {squat.sets}x{reps_display} @ {intensity_display} {gear if gear != 'Raw' else ''}",
                 "Accessories": [
                     "Lunges: 4x15",
@@ -130,7 +133,15 @@ class PowerliftingProgram:
                 ]
             },
             "Wednesday": {
-                "Cardio": self.get_cardio_workout(week_number)
+                                "Main": self.get_bench_workout(week_in_cycle),
+                "Accessories": [
+                    "JM Press: 4x12",
+                    "Dumbbell Bench Press: 3x15",
+                    "Incline DB Press: 3x15",
+                    "Superset (3-5 rounds):",
+                    "- Long Rope Tricep Pushdown: 15 reps",
+                    "- Rear Delt Flies or Cable Face Pull: 25 reps"
+                ]
             },
             "Friday": {
                 "Main": self.get_deadlift_workout(week_in_cycle, deadlift_style),
@@ -144,17 +155,6 @@ class PowerliftingProgram:
                     "Lat Pulldown: 12 reps"
                 ]
             },
-            "Sunday": {
-                "Main": self.get_bench_workout(week_in_cycle),
-                "Accessories": [
-                    "JM Press: 4x12",
-                    "Dumbbell Bench Press: 3x15",
-                    "Incline DB Press: 3x15",
-                    "Superset (3-5 rounds):",
-                    "- Long Rope Tricep Pushdown",
-                    "- Rear Delt Flies"
-                ]
-            }
         }
         return week_program
     

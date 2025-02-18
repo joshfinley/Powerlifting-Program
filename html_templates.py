@@ -1,11 +1,13 @@
+from typing import Dict, List
+import markdown
+from markdown.extensions.fenced_code import FencedCodeExtension
+from markdown.extensions.tables import TableExtension
 
-        <!DOCTYPE html>
-        <html lang="en">
-        <head>
-            <meta charset="UTF-8">
-            <meta name="viewport" content="width=device-width, initial-scale=1.0">
-            <title>Powerlifting Program - Week 6</title>
-            
+class HTMLTemplates:
+    @staticmethod
+    def generate_css() -> str:
+        """Generates CSS styling for the program"""
+        return """
         <style>
             /* Program container layout */
             .program-container {
@@ -267,90 +269,100 @@
                 background-color: #f6f8fa;
             }
         </style>
+        """
+
+    @staticmethod
+    def generate_program_page(week_program: Dict, all_programs: List[Dict]) -> str:
+        """Generates a complete HTML file for a week's program"""
+        nav_links = HTMLTemplates._generate_navigation_links(week_program['Week'], all_programs)
+        content = HTMLTemplates._generate_week_content(week_program)
         
+        return f"""
+        <!DOCTYPE html>
+        <html lang="en">
+        <head>
+            <meta charset="UTF-8">
+            <meta name="viewport" content="width=device-width, initial-scale=1.0">
+            <title>Powerlifting Program - Week {week_program['Week']}</title>
+            {HTMLTemplates.generate_css()}
         </head>
         <body>
             <div class="container">
                 <h1><a href="index.html">6-Month Powerlifting Program</a></h1>
                 <div class="week-program">
                     <div class="program-navigation">
-                        <div class="week-links">
-<select class="week-select" onchange="window.location.href=this.value">
-<option value="02-17-2025-program.html">Week 1 - 02-17-2025</option>
-<option value="02-24-2025-program.html">Week 2 - 02-24-2025</option>
-<option value="03-03-2025-program.html">Week 3 - 03-03-2025</option>
-<option value="03-10-2025-program.html">Week 4 - 03-10-2025</option>
-<option value="03-17-2025-program.html">Week 5 - 03-17-2025</option>
-<option value="03-24-2025-program.html" selected>Week 6 - 03-24-2025</option>
-<option value="03-31-2025-program.html">Week 7 - 03-31-2025</option>
-<option value="04-07-2025-program.html">Week 8 - 04-07-2025</option>
-<option value="04-14-2025-program.html">Week 9 - 04-14-2025</option>
-<option value="04-21-2025-program.html">Week 10 - 04-21-2025</option>
-<option value="04-28-2025-program.html">Week 11 - 04-28-2025</option>
-<option value="05-05-2025-program.html">Week 12 - 05-05-2025</option>
-<option value="05-12-2025-program.html">Week 13 - 05-12-2025</option>
-<option value="05-19-2025-program.html">Week 14 - 05-19-2025</option>
-<option value="05-26-2025-program.html">Week 15 - 05-26-2025</option>
-<option value="06-02-2025-program.html">Week 16 - 06-02-2025</option>
-<option value="06-09-2025-program.html">Week 17 - 06-09-2025</option>
-<option value="06-16-2025-program.html">Week 18 - 06-16-2025</option>
-<option value="06-23-2025-program.html">Week 19 - 06-23-2025</option>
-<option value="06-30-2025-program.html">Week 20 - 06-30-2025</option>
-<option value="07-07-2025-program.html">Week 21 - 07-07-2025</option>
-<option value="07-14-2025-program.html">Week 22 - 07-14-2025</option>
-<option value="07-21-2025-program.html">Week 23 - 07-21-2025</option>
-<option value="07-28-2025-program.html">Week 24 - 07-28-2025</option>
-</select>
-<a href="03-17-2025-program.html" class="nav-link">← Week 5</a>
-<a href="03-31-2025-program.html" class="nav-link">Week 7 →</a>
-</div>
+                        {nav_links}
                     </div>
-                    <div class="week-header">
-                <h2>Week 6 - 03-24-2025</h2>
-                <div class="program-meta">
-                    <p><strong>Bar:</strong> SSB</p>
-                    <p><strong>Gear:</strong> Raw</p>
-                </div>
-            </div>
-<div class="workout-day"><h3>Sunday</h3>
-<div class="workout-section"><h4>Cardio:</h4><p>Sled Drag - 1 hour</p></div>
-</div>
-<div class="workout-day"><h3>Tuesday</h3>
-<div class="workout-section"><h4>Main:</h4><p>Squat: 3x7 @ 76.0% </p></div>
-<div class="workout-section"><h4>Accessories:</h4><ul>
-<li>Lunges: 4x15</li>
-<li>Heel Touch Step Downs: 3x15</li>
-<li>Giant Set (3-5 rounds):</li>
-<li class="sub-item">Cable Woodchopper: 15 reps</li>
-<li class="sub-item">Seated Barbell OHP: 12 reps</li>
-<li class="sub-item">T-bar Row: 12 reps</li>
-</ul></div>
-</div>
-<div class="workout-day"><h3>Wednesday</h3>
-<div class="workout-section"><h4>Main:</h4><p>Bench Press: 3x7 @ 76%</p></div>
-<div class="workout-section"><h4>Accessories:</h4><ul>
-<li>JM Press: 4x12</li>
-<li>Dumbbell Bench Press: 3x15</li>
-<li>Incline DB Press: 3x15</li>
-<li>Superset (3-5 rounds):</li>
-<li class="sub-item">Long Rope Tricep Pushdown: 15 reps</li>
-<li class="sub-item">Rear Delt Flies or Cable Face Pull: 25 reps</li>
-</ul></div>
-</div>
-<div class="workout-day"><h3>Friday</h3>
-<div class="workout-section"><h4>Main:</h4><p>Deficit Deadlift: 3x7 @ 76.0%</p></div>
-<div class="workout-section"><h4>Accessories:</h4><ul>
-<li>Hamstring Curl: 4x15</li>
-<li>Reverse Hyper: 3x20</li>
-</ul></div>
-<div class="workout-section"><h4>Giant Set (3-5 Rounds):</h4><ul>
-<li>Weighted Decline Situps: AMRAP</li>
-<li>Bench Press: AMRAP @ 65%</li>
-<li>Lat Pulldown: 12 reps</li>
-</ul></div>
-</div>
+                    {content}
                 </div>
             </div>
         </body>
         </html>
+        """
+
+    @staticmethod
+    def _generate_navigation_links(current_week: int, all_programs: List[Dict]) -> str:
+        """Generates navigation links for the program pages"""
+        links = ['<div class="week-links">']
         
+        # Add week selector dropdown
+        links.append('<select class="week-select" onchange="window.location.href=this.value">')
+        for program in all_programs:
+            week_num = program["Week"]
+            date = program["Date"]
+            selected = ' selected' if week_num == current_week else ''
+            links.append(
+                f'<option value="{date}-program.html"{selected}>'
+                f'Week {week_num} - {date}</option>'
+            )
+        links.append('</select>')
+        
+        # Add prev/next navigation
+        if current_week > 1:
+            prev_program = all_programs[current_week - 2]
+            links.append(
+                f'<a href="{prev_program["Date"]}-program.html" class="nav-link">← Week {current_week - 1}</a>'
+            )
+        
+        if current_week < len(all_programs):
+            next_program = all_programs[current_week]
+            links.append(
+                f'<a href="{next_program["Date"]}-program.html" class="nav-link">Week {current_week + 1} →</a>'
+            )
+            
+        links.append('</div>')
+        return '\n'.join(links)
+
+    @staticmethod
+    def _generate_week_content(week_program: Dict) -> str:
+        """Generates the HTML content for a week's program"""
+        content = [
+            f'''<div class="week-header">
+                <h2>Week {week_program['Week']} - {week_program['Date']}</h2>
+                <div class="program-meta">
+                    <p><strong>Bar:</strong> {week_program['Bar Type']}</p>
+                    <p><strong>Gear:</strong> {week_program['Gear']}</p>
+                </div>
+            </div>'''
+        ]
+        
+        for day, workout in week_program.items():
+            if day not in ['Week', 'Bar Type', 'Chains', 'Gear', 'Date']:
+                content.append(f'<div class="workout-day"><h3>{day}</h3>')
+                if isinstance(workout, dict):
+                    for key, value in workout.items():
+                        if isinstance(value, list):
+                            content.append(f'<div class="workout-section"><h4>{key}:</h4><ul>')
+                            for item in value:
+                                if item.startswith('-'):
+                                    content.append(f'<li class="sub-item">{item[2:]}</li>')
+                                else:
+                                    content.append(f'<li>{item}</li>')
+                            content.append('</ul></div>')
+                        else:
+                            content.append(f'<div class="workout-section"><h4>{key}:</h4><p>{value}</p></div>')
+                else:
+                    content.append(f'<p>{workout}</p>')
+                content.append('</div>')
+        
+        return '\n'.join(content)

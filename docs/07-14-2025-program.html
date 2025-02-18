@@ -4,77 +4,353 @@
         <head>
             <meta charset="UTF-8">
             <meta name="viewport" content="width=device-width, initial-scale=1.0">
-            <title>Powerlifting Program - Week 23</title>
+            <title>Powerlifting Program - Week 22</title>
             
         <style>
+            /* Program container layout */
+            .program-container {
+                display: grid;
+                grid-template-columns: 250px 1fr;
+                gap: 30px;
+                margin-top: 30px;
+                width: 100%;
+            }
+
+            /* Base styles */
+            body {
+                font-family: Arial, sans-serif;
+                line-height: 1.6;
+                margin: 0;
+                padding: 20px;
+                background-color: #f5f5f5;
+            }
+            
+            .container {
+                max-width: 1200px;
+                margin: 0 auto;
+                padding: 0 20px;
+            }
+            
+            h1 {
+                margin-bottom: 30px;
+            }
+            
+            h1 a {
+                color: #2c3e50;
+                text-decoration: none;
+            }
+            
+            h1 a:hover {
+                color: #3498db;
+            }
+            
+            /* Program styles */
             .week-program {
                 max-width: 800px;
-                margin: 20px auto;
+                margin: 0 auto;
                 padding: 20px;
-                font-family: Arial, sans-serif;
                 background-color: #ffffff;
                 box-shadow: 0 2px 4px rgba(0,0,0,0.1);
                 border-radius: 8px;
             }
+            
+            /* Navigation styles */
+            .program-navigation {
+                margin-bottom: 20px;
+                padding: 15px;
+                background-color: #f8f9fa;
+                border-radius: 6px;
+                border: 1px solid #dee2e6;
+            }
+            
+            .week-links {
+                display: flex;
+                justify-content: space-between;
+                align-items: center;
+                gap: 15px;
+            }
+            
+            .week-select {
+                padding: 8px 12px;
+                border-radius: 4px;
+                border: 1px solid #dee2e6;
+                flex-grow: 1;
+                max-width: 300px;
+                font-size: 14px;
+            }
+            
+            .nav-link {
+                padding: 8px 16px;
+                background-color: #e9ecef;
+                border-radius: 4px;
+                color: #495057;
+                text-decoration: none;
+                font-weight: 500;
+                transition: all 0.2s ease;
+            }
+            
+            .nav-link:hover {
+                background-color: #dee2e6;
+                color: #212529;
+            }
+            
+            /* Content styles */
             .week-header {
                 border-bottom: 2px solid #eee;
                 margin-bottom: 20px;
                 padding-bottom: 10px;
             }
+            
             .program-meta {
                 display: grid;
                 grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
                 gap: 10px;
                 margin: 10px 0;
             }
+            
             .workout-day {
                 margin: 20px 0;
                 padding: 15px;
                 background-color: #f8f9fa;
                 border-radius: 6px;
             }
+            
             .workout-day h3 {
                 color: #2c3e50;
                 margin-top: 0;
                 border-bottom: 1px solid #dee2e6;
                 padding-bottom: 8px;
             }
+            
             .workout-section {
                 margin: 15px 0;
             }
+            
             .workout-section h4 {
                 color: #495057;
                 margin: 10px 0 5px 0;
             }
+            
             ul {
                 list-style-type: none;
                 padding-left: 0;
             }
+            
             li {
                 margin: 5px 0;
                 padding: 5px 0;
             }
+            
             .sub-item {
                 padding-left: 20px;
                 color: #666;
             }
+            
             p {
                 margin: 5px 0;
+            }
+            
+            /* Index page specific styles */
+            .sidebar {
+                background: white;
+                padding: 20px;
+                border-radius: 8px;
+                box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+                height: fit-content;
+                position: sticky;
+                top: 20px;
+            }
+            
+            .sidebar .week-links {
+                list-style-type: none;
+                padding: 0;
+                margin: 0;
+            }
+            
+            .sidebar .week-links li {
+                margin: 8px 0;
+            }
+            
+            .sidebar .week-links a {
+                display: block;
+                padding: 8px 12px;
+                background-color: #f8f9fa;
+                border-radius: 4px;
+                color: #495057;
+                text-decoration: none;
+                transition: all 0.2s ease;
+            }
+            
+            .sidebar .week-links a:hover {
+                background-color: #e9ecef;
+                color: #212529;
+            }
+            
+            .main-content {
+                background: white;
+                padding: 30px;
+                border-radius: 8px;
+                box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+            }
+            
+            .readme-content {
+                max-width: 100%;
+                overflow-x: auto;
+            }
+            
+            .readme-content h1 {
+                font-size: 2em;
+                margin-top: 0;
+            }
+            
+            .readme-content h2 {
+                font-size: 1.5em;
+                margin-top: 25px;
+                padding-bottom: 8px;
+                border-bottom: 1px solid #eee;
+            }
+            
+            .readme-content h3 {
+                font-size: 1.2em;
+                margin-top: 20px;
+            }
+            
+            .readme-content p {
+                margin: 15px 0;
+            }
+            
+            .readme-content ul, 
+            .readme-content ol {
+                padding-left: 25px;
+                margin: 15px 0;
+            }
+            
+            .readme-content li {
+                margin: 5px 0;
+            }
+            
+            .readme-content code {
+                background-color: #f6f8fa;
+                padding: 2px 4px;
+                border-radius: 3px;
+                font-family: monospace;
+            }
+            
+            .readme-content pre {
+                background-color: #f6f8fa;
+                padding: 16px;
+                border-radius: 6px;
+                overflow-x: auto;
+            }
+            
+            .readme-content blockquote {
+                margin: 15px 0;
+                padding: 0 15px;
+                border-left: 4px solid #ddd;
+                color: #666;
+            }
+            
+            .readme-content table {
+                border-collapse: collapse;
+                width: 100%;
+                margin: 15px 0;
+            }
+            
+            .readme-content th, 
+            .readme-content td {
+                border: 1px solid #ddd;
+                padding: 8px;
+                text-align: left;
+            }
+            
+            .readme-content th {
+                background-color: #f6f8fa;
             }
         </style>
         
         </head>
         <body>
-            
-        <div class="week-program">
-            <div class="week-header">
-                <h2>Week 23 - 07-14-2025</h2>
+            <div class="container">
+                <h1><a href="index.html">6-Month Powerlifting Program</a></h1>
+                <div class="week-program">
+                    <div class="program-navigation">
+                        <div class="week-links">
+<select class="week-select" onchange="window.location.href=this.value">
+<option value="02-17-2025-program.html">Week 1 - 02-17-2025</option>
+<option value="02-24-2025-program.html">Week 2 - 02-24-2025</option>
+<option value="03-03-2025-program.html">Week 3 - 03-03-2025</option>
+<option value="03-10-2025-program.html">Week 4 - 03-10-2025</option>
+<option value="03-17-2025-program.html">Week 5 - 03-17-2025</option>
+<option value="03-24-2025-program.html">Week 6 - 03-24-2025</option>
+<option value="03-31-2025-program.html">Week 7 - 03-31-2025</option>
+<option value="04-07-2025-program.html">Week 8 - 04-07-2025</option>
+<option value="04-14-2025-program.html">Week 9 - 04-14-2025</option>
+<option value="04-21-2025-program.html">Week 10 - 04-21-2025</option>
+<option value="04-28-2025-program.html">Week 11 - 04-28-2025</option>
+<option value="05-05-2025-program.html">Week 12 - 05-05-2025</option>
+<option value="05-12-2025-program.html">Week 13 - 05-12-2025</option>
+<option value="05-19-2025-program.html">Week 14 - 05-19-2025</option>
+<option value="05-26-2025-program.html">Week 15 - 05-26-2025</option>
+<option value="06-02-2025-program.html">Week 16 - 06-02-2025</option>
+<option value="06-09-2025-program.html">Week 17 - 06-09-2025</option>
+<option value="06-16-2025-program.html">Week 18 - 06-16-2025</option>
+<option value="06-23-2025-program.html">Week 19 - 06-23-2025</option>
+<option value="06-30-2025-program.html">Week 20 - 06-30-2025</option>
+<option value="07-07-2025-program.html">Week 21 - 07-07-2025</option>
+<option value="07-14-2025-program.html" selected>Week 22 - 07-14-2025</option>
+<option value="07-21-2025-program.html">Week 23 - 07-21-2025</option>
+<option value="07-28-2025-program.html">Week 24 - 07-28-2025</option>
+</select>
+<a href="07-07-2025-program.html" class="nav-link">← Week 21</a>
+<a href="07-21-2025-program.html" class="nav-link">Week 23 →</a>
+</div>
+                    </div>
+                    <div class="week-header">
+                <h2>Week 22 - 07-14-2025</h2>
                 <div class="program-meta">
                     <p><strong>Bar:</strong> Straight</p>
                     <p><strong>Gear:</strong> Raw</p>
                 </div>
             </div>
-        <div class="workout-day"><h3>Monday</h3><div class="workout-section"><h4>Main:</h4><p>Squat: 4x3 @ 86.0% </p></div><div class="workout-section"><h4>Accessories:</h4><ul><li>Lunges: 4x15</li><li>Heel Touch Step Downs: 3x15</li><li>Giant Set (3-5 rounds):</li><li class="sub-item">Cable Woodchopper: 15 reps</li><li class="sub-item">Seated Barbell OHP: 12 reps</li><li class="sub-item">T-bar Row: 12 reps</li></ul></div></div><div class="workout-day"><h3>Wednesday</h3><div class="workout-section"><h4>Cardio:</h4><p>Ruck (25 lbs max) - 1 hour</p></div></div><div class="workout-day"><h3>Friday</h3><div class="workout-section"><h4>Main:</h4><p>Deficit Deadlift: 4x3 @ 86.0%</p></div><div class="workout-section"><h4>Accessories:</h4><ul><li>Hamstring Curl: 4x15</li><li>Reverse Hyper: 3x20</li></ul></div><div class="workout-section"><h4>Giant Set (3-5 Rounds):</h4><ul><li>Weighted Decline Situps: AMRAP</li><li>Bench Press: AMRAP @ 65%</li><li>Lat Pulldown: 12 reps</li></ul></div></div><div class="workout-day"><h3>Sunday</h3><div class="workout-section"><h4>Main:</h4><p>Bench Press: 4x3 @ 86%</p></div><div class="workout-section"><h4>Accessories:</h4><ul><li>JM Press: 4x12</li><li>Dumbbell Bench Press: 3x15</li><li>Incline DB Press: 3x15</li><li>Superset (3-5 rounds):</li><li class="sub-item">Long Rope Tricep Pushdown</li><li class="sub-item">Rear Delt Flies</li></ul></div></div></div>
+<div class="workout-day"><h3>Sunday</h3>
+<div class="workout-section"><h4>Cardio:</h4><p>Light Farmers Carry - 1 hour</p></div>
+</div>
+<div class="workout-day"><h3>Tuesday</h3>
+<div class="workout-section"><h4>Main:</h4><p>Squat: 3x7 @ 76.0% </p></div>
+<div class="workout-section"><h4>Accessories:</h4><ul>
+<li>Lunges: 4x15</li>
+<li>Heel Touch Step Downs: 3x15</li>
+<li>Giant Set (3-5 rounds):</li>
+<li class="sub-item">Cable Woodchopper: 15 reps</li>
+<li class="sub-item">Seated Barbell OHP: 12 reps</li>
+<li class="sub-item">T-bar Row: 12 reps</li>
+</ul></div>
+</div>
+<div class="workout-day"><h3>Wednesday</h3>
+<div class="workout-section"><h4>Main:</h4><p>Bench Press: 3x7 @ 76%</p></div>
+<div class="workout-section"><h4>Accessories:</h4><ul>
+<li>JM Press: 4x12</li>
+<li>Dumbbell Bench Press: 3x15</li>
+<li>Incline DB Press: 3x15</li>
+<li>Superset (3-5 rounds):</li>
+<li class="sub-item">Long Rope Tricep Pushdown: 15 reps</li>
+<li class="sub-item">Rear Delt Flies or Cable Face Pull: 25 reps</li>
+</ul></div>
+</div>
+<div class="workout-day"><h3>Friday</h3>
+<div class="workout-section"><h4>Main:</h4><p>Deficit Deadlift: 3x7 @ 76.0%</p></div>
+<div class="workout-section"><h4>Accessories:</h4><ul>
+<li>Hamstring Curl: 4x15</li>
+<li>Reverse Hyper: 3x20</li>
+</ul></div>
+<div class="workout-section"><h4>Giant Set (3-5 Rounds):</h4><ul>
+<li>Weighted Decline Situps: AMRAP</li>
+<li>Bench Press: AMRAP @ 65%</li>
+<li>Lat Pulldown: 12 reps</li>
+</ul></div>
+</div>
+                </div>
+            </div>
         </body>
         </html>
         
